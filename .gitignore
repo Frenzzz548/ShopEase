@@ -8,3 +8,5 @@
 **/writable/uploads/*
 .vscode/
 .idea/
+
+/AGENTS.md
