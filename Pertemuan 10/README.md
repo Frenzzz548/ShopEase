@@ -22,14 +22,14 @@ Buka [beranda](http://localhost:8080/) atau [contoh detail produk](http://localh
 
 ## Implementasi MVC dan Routing
 
-| File atau folder | Tanggung jawab |
-| --- | --- |
-| `app/Config/Routes.php` | Memetakan empat rute GET dan menonaktifkan Auto Routing. |
-| `app/Controllers/HomeController.php` | Menyiapkan data beranda dan merender halaman Tentang. |
-| `app/Controllers/ProductController.php` | Memilih produk untuk katalog, filter kategori, dan detail berdasarkan ID. |
-| `app/Config/Catalog.php` | Menyediakan array kategori dan produk dengan ID sebagai kunci. |
+| File atau folder                                            | Tanggung jawab                                                                            |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `app/Config/Routes.php`                                   | Memetakan empat rute GET dan menonaktifkan Auto Routing.                                  |
+| `app/Controllers/HomeController.php`                      | Menyiapkan data beranda dan merender halaman Tentang.                                     |
+| `app/Controllers/ProductController.php`                   | Memilih produk untuk katalog, filter kategori, dan detail berdasarkan ID.                 |
+| `app/Config/Catalog.php`                                  | Menyediakan array kategori dan produk dengan ID sebagai kunci.                            |
 | `app/Views/frontend/` dan `app/Views/layouts/store.php` | Merender halaman, memakai ulang grid produk, serta menyediakan navbar dan footer bersama. |
-| `public/css/` dan `public/images/shopease/` | Menyimpan Bootstrap, stylesheet ShopEase, dan gambar WebP lokal. |
+| `public/css/` dan `public/images/shopease/`             | Menyimpan Bootstrap, stylesheet ShopEase, dan gambar WebP lokal.                          |
 
 Controller memilih data dari `Catalog.php` sebelum mengirimkannya ke view. Pertemuan 10 belum menggunakan Model database atau CRUD.
 
@@ -37,12 +37,12 @@ Aset gambar produk dibuat dengan ImageGen dan disimpan lokal. Enam foto katalog 
 
 ### Rute
 
-| Metode | URL | Handler |
-| --- | --- | --- |
-| GET | `/` | `HomeController::index` |
-| GET | `/products` | `ProductController::index` |
-| GET | `/products/(:num)` | `ProductController::detail/$1` |
-| GET | `/about` | `HomeController::about` |
+| Metode | URL                  | Handler                          |
+| ------ | -------------------- | -------------------------------- |
+| GET    | `/`                | `HomeController::index`        |
+| GET    | `/products`        | `ProductController::index`     |
+| GET    | `/products/(:num)` | `ProductController::detail/$1` |
+| GET    | `/about`           | `HomeController::about`        |
 
 Rute `/products/(:num)` meneruskan ID numerik ke `ProductController::detail()`. Misalnya, `/products/1` mengambil Wireless Headphone dari array katalog. ID yang tidak tersedia menghasilkan HTTP 404.
 
@@ -107,22 +107,6 @@ Navbar, teks hero, dan foto tersusun vertikal pada lebar 390 piksel.
 Filter kategori dan grid dua kolom menampilkan seluruh produk pada layar ponsel.
 
 ![Katalog ShopEase mobile dengan grid dua kolom](docs/screenshots/catalog-mobile.png)
-
-## Pengujian
-
-### Stage 2
-
-- `php -l` lulus untuk 10 file PHP. `php spark routes` menampilkan empat rute GET dengan Auto Routing nonaktif di konfigurasi.
-- Uji HTTP pada server Spark mengembalikan 200 untuk beranda, katalog, Tentang, detail ID 1–6, dua stylesheet, dan tujuh gambar WebP. ID yang hilang atau bukan angka, rute tak terdaftar, dan `POST /products` mengembalikan 404.
-- Filter Olahraga menampilkan dua produk. Nilai kategori tak dikenal mengembalikan katalog lengkap.
-- Chrome headless memeriksa tampilan pada 390, 768, dan 1280 piksel tanpa gulir horizontal atau gambar gagal dimuat. Alur klik kategori, katalog terfilter, dan detail berhasil.
-- Uji HTTP berjalan dengan pengaturan driver database yang sengaja dibuat tidak valid di proses server uji.
-
-### Stage 2.1
-
-- `composer check-platform-reqs` lulus pada PHP 8.5.12. `php spark routes` menampilkan empat rute GET.
-- Uji HTTP mengembalikan 200 untuk beranda, katalog, filter Olahraga, detail ID 1, dan Tentang. Detail dengan ID tak tersedia atau bukan angka, rute tak terdaftar, dan `POST /products` mengembalikan 404.
-- Chrome headless memeriksa judul, stylesheet, dan pemuatan gambar sebelum mengambil setiap screenshot. Katalog desktop menampilkan tiga kolom, katalog mobile dua kolom, dan filter Olahraga dua produk.
 
 ## Batasan
 
