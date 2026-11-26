@@ -1,0 +1,45 @@
+sequenceDiagram
+    actor B as Pengguna
+    participant R as Routes dan filter CSRF
+    participant A as AuthController
+    participant U as UserModel
+    participant S as Session CI4
+    participant F as AuthFilter
+    participant D as DashboardController
+
+    B->>R: GET /login
+    R->>A: Tampilkan formulir
+    A-->>B: View Login
+    B->>R: POST /login dengan kredensial dan token CSRF
+    alt Token CSRF gagal
+        R-->>B: HTTP 403
+    else Token CSRF valid
+        R->>A: authenticate
+        A->>A: Validasi email dan password
+        opt Input valid
+            A->>U: Cari akun berdasarkan email
+            U-->>A: Akun beserta hash dan peran
+        end
+        A->>A: password_verify
+        alt Kredensial salah
+            A-->>B: HTTP 401 dan pesan generik
+        else Kredensial valid
+            A->>S: Regenerasi ID dan simpan data akun
+            A-->>B: HTTP 303 ke /admin, /operator, atau /
+        end
+    end
+
+    B->>R: GET dashboard sesuai peran
+    R->>F: Periksa session dan izin rute
+    opt Session dan izin rute valid
+        F->>U: Baca peran akun terkini
+        U-->>F: Peran dari database
+    end
+    alt Session sah dan peran cocok
+        F->>D: Izinkan rute dashboard
+        D-->>B: View dashboard
+    else Akun hilang, peran berubah, atau belum login
+        F-->>B: Arahkan ke login
+    else Peran ditolak pada rute
+        F-->>B: HTTP 403
+    end

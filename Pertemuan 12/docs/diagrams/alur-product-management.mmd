@@ -1,0 +1,21 @@
+flowchart TD
+    A["Dashboard Administrator"] --> AA["CRUD kategori dan produk · kelola semua aksi gambar"]
+    O["Dashboard Operator"] --> OO["Baca kategori · lihat, tambah, edit produk · upload dan pilih utama"]
+    AA --> F["Rute sesuai peran · AuthFilter dan CSRF untuk POST"]
+    OO --> F
+    F --> C["CategoryController"]
+    F --> P["Admin ProductController"]
+    C --> CM["CategoryModel"]
+    CM --> D[("MariaDB atau MySQL")]
+    P --> PM["ProductModel · daftar, detail, filter"]
+    P -->|Teruskan aksi setelah validasi input| T["ProductImageManager · transaksi dan kunci baris produk"]
+    T --> PM
+    T --> I["ProductImageModel · relasi dan pilihan gambar utama"]
+    T --> S["ProductImageStorage · encode ulang dan simpan upload"]
+    PM --> D
+    I --> D
+    T --> X["Gambar pertama jadi utama · jika dihapus, pilih ID terkecil yang tersisa"]
+    D --> K["Beranda, katalog, filter kategori, detail publik"]
+    D --> R["ProductImageController · periksa referensi file"]
+    S --> R
+    R --> K

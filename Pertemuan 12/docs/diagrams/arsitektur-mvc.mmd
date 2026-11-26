@@ -1,0 +1,23 @@
+flowchart TD
+    B["Browser"] --> R["Routes.php · GET dan POST eksplisit"]
+    R --> F["Filter CI4 · CSRF pada POST dan AuthFilter untuk rute privat"]
+    F --> A["Controller beranda, katalog, autentikasi, dashboard, kategori"]
+    F --> P["Admin ProductController · grup Admin dan Operator"]
+    F --> I["ProductImageController · penyajian publik"]
+    F -->|AuthFilter membaca UserModel| M["UserModel, CategoryModel, ProductModel, ProductImageModel"]
+    A --> M
+    P --> M
+    P --> G["ProductImageManager · transaksi dan cleanup"]
+    G --> M
+    G --> S["ProductImageStorage"]
+    I --> M
+    I --> S
+    S --> W["writable/uploads/products"]
+    M --> D[("MariaDB atau MySQL")]
+    A --> V["Views dan layout Bootstrap"]
+    P --> V
+    V -->|HTML| B
+    I -->|Berkas gambar| B
+    A -.-> CI["Services CI4 · session, validasi, respons"]
+    P -.-> CI
+    F -.-> CI

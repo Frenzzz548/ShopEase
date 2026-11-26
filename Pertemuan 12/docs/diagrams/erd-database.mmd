@@ -1,0 +1,42 @@
+erDiagram
+    categories ||--o{ products : mengelompokkan
+    products ||--o{ product_images : memiliki
+
+    users {
+        int id_user PK
+        varchar name
+        varchar email UK
+        varchar password "hash"
+        enum role
+        varchar phone
+        text address
+        datetime created_at
+        datetime updated_at
+    }
+    categories {
+        int id_category PK
+        varchar name
+        varchar slug UK
+        text description
+        datetime created_at
+        datetime updated_at
+    }
+    products {
+        int id_product PK
+        int id_category FK
+        varchar name
+        varchar slug UK
+        text description
+        decimal price "DECIMAL(12,2)"
+        int stock "unsigned"
+        enum status
+        datetime created_at
+        datetime updated_at
+    }
+    product_images {
+        int id_image PK
+        int id_product FK
+        varchar image "path relatif"
+        tinyint is_primary
+        datetime created_at
+    }
